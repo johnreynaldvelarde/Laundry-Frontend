@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
 
         return newAccessToken;
       } else {
-        // console.error("Error refreshing access token:", response.data.message);
+        console.error("Error refreshing access token:", response.data.message);
       }
     } catch (error) {
       console.error("Error refreshing access token:", error);
@@ -66,9 +66,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const fetchUserDetails = async (token) => {
-    if (!token || isFetchingRef.current) return; // Prevent duplicate fetches
+    if (!token || isFetchingRef.current) return;
 
-    isFetchingRef.current = true; // Mark fetch as ongoing
+    isFetchingRef.current = true;
     try {
       const response = await axiosPrivate(`/user/me`, {
         headers: {
@@ -80,7 +80,6 @@ export const AuthProvider = ({ children }) => {
         const user = response.data.user;
 
         if (user) {
-          // Initialize user details with common properties
           const userDetails = {
             userId: user.userId,
             storeId: user.storeId,
@@ -105,7 +104,6 @@ export const AuthProvider = ({ children }) => {
             },
           };
 
-          // Add roleName and permissions only if the user is not a customer
           if (user.userType !== "Customer") {
             userDetails.roleName = user.roleName || null;
             userDetails.permissions = {
@@ -124,7 +122,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Error fetching user details:", error);
     } finally {
-      isFetchingRef.current = false; // Mark fetch as completed
+      isFetchingRef.current = false;
     }
   };
 

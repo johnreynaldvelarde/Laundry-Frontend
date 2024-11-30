@@ -7,7 +7,6 @@ import { COLORS } from "../../../constants/color";
 import { updateCustomerChangeStore } from "../../../services/api/customerApi";
 import { viewStore } from "../../../services/api/getApi";
 import { calculateDistance } from "../../../utils/method";
-import { handleUpdateChangeStore } from "../../../../../server/src/services/user/customer";
 import usePopup from "../../../hooks/common/usePopup";
 import RemindConfirmationDialog from "../../../components/common/RemindConfirmationDialog";
 

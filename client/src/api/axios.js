@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3002/api";
+const fallbackURL = "https://web-production-dd1d.up.railway.app/api";
+
+// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = fallbackURL;
 
 export const axiosPublic = axios.create({
   baseURL: API_URL,
@@ -42,70 +45,3 @@ axiosPrivate.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-// import axios from 'axios';
-
-// const API_URL = 'http://localhost:3002/api';
-
-// export const axiosPublic = axios.create({
-//   baseURL: API_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   withCredentials: true,
-// });
-
-// export const axiosPrivate = axios.create({
-//   baseURL: API_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   withCredentials: true,
-// });
-
-// import axios from 'axios';
-
-// const API_URL = 'http://localhost:3002/api';
-
-// export const axiosPublic = axios.create({
-//   baseURL: API_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   withCredentials: true,
-// });
-
-// export const axiosPrivate = axios.create({
-//   baseURL: API_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   withCredentials: true,
-// });
-
-// // Add request and response interceptors
-// axiosPrivate.interceptors.request.use(
-//   (config) => {
-//     // You can add authorization headers or other configurations here
-//     return config;
-//   },
-//   (error) => {
-//     // Handle request error here
-//     return Promise.reject(error);
-//   }
-// );
-
-// axiosPrivate.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   },
-//   (error) => {
-//     // Suppress console logging for specific errors
-//     if (error.response && error.response.status === 400) {
-//       // Optionally handle 400 errors or suppress logs
-//     } else {
-//       console.error("API Error:", error);
-//     }
-//     return Promise.reject(error);
-//   }
-// );
