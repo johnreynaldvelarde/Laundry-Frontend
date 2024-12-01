@@ -1,12 +1,12 @@
 import { axiosPrivate, axiosPublic } from "../api/axios";
 
-const handleError = (error) => {
-  console.error("API Error:", error);
+// const handleError = (error) => {
+//   console.error("API Error:", error);
 
-  const message =
-    error.response?.data?.message || "An unexpected error occurred.";
-  return new Error(message);
-};
+//   const message =
+//     error.response?.data?.message || "An unexpected error occurred.";
+//   return new Error(message);
+// };
 
 // Login Service
 export const loginService = {
