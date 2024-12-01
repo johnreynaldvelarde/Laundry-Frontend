@@ -69,17 +69,17 @@ const SectionAdminUser = () => {
   const fetchRolesData = useCallback(() => {
     fetchRoles(
       viewRolesAndPermissions.getRoleAndPermission,
-      userDetails.storeId
+      userDetails.userId
     );
-  }, [fetchRoles, userDetails?.storeId]);
+  }, [fetchRoles, userDetails?.userId]);
 
   const fetchStoresData = useCallback(() => {
-    fetchStores(viewAdminBasedStore.getAdminBasedStore, userDetails.storeId);
-  }, [fetchStores, userDetails?.storeId]);
+    fetchStores(viewAdminBasedStore.getAdminBasedStore, userDetails.userId);
+  }, [fetchStores, userDetails?.userId]);
 
   const fetchUsersData = useCallback(() => {
-    fetchUsers(viewAdminBasedUser.getAdminBasedUser, userDetails.storeId);
-  }, [fetchUsers, userDetails?.storeId]);
+    fetchUsers(viewAdminBasedUser.getAdminBasedUser, userDetails.userId);
+  }, [fetchUsers, userDetails?.userId]);
 
   // useEffect(() => {
   //   fetchRolesData();
