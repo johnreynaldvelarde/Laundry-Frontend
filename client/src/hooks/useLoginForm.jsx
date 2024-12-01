@@ -13,7 +13,7 @@ const useLoginForm = (setLoginShowPopup, showLoginPopup) => {
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,14 +47,16 @@ const useLoginForm = (setLoginShowPopup, showLoginPopup) => {
         setLoginPassword("");
 
         if (userType === "Customer") {
-          const customerDetails =
-            await checkCustomerDetails.getCheckCustomerDetails(userId);
+          const details = await checkCustomerDetails.getCheckCustomerDetails(
+            userId
+          );
 
-          if (customerDetails.success !== false) {
-            if (
-              customerDetails.storeIdIsNull ||
-              customerDetails.addressIsNull
-            ) {
+          const { storeIdIsNull, addressIdIsNull, isVerified } = details.data;
+
+          if (details.success !== false) {
+            if (!isVerified) {
+              navigate("/verified-account");
+            } else if (storeIdIsNull || addressIdIsNull) {
               navigate("/complete-details");
             } else {
               navigate("/customer-page");

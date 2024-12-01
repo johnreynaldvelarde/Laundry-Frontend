@@ -8,8 +8,9 @@ export const checkCustomerDetails = {
       );
 
       if (response.data.success) {
-        const { storeIdIsNull, addressIsNull } = response.data.data;
-        return { storeIdIsNull, addressIsNull };
+        return response.data;
+        // const { storeIdIsNull, addressIdIsNull, isVerified } = response.data;
+        // return { storeIdIsNull, addressIdIsNull, isVerified };
       } else {
         return { success: false, message: response.data.message };
       }

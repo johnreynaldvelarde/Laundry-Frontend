@@ -95,8 +95,10 @@ const C_Navbar = () => {
   };
 
   useEffect(() => {
-    fetchNotificationsData();
-  }, [fetchNotificationsData]);
+    if (userDetails) {
+      fetchNotificationsData();
+    }
+  }, [userDetails, fetchNotificationsData]);
 
   return (
     <Box className="sticky top-0 z-50 py-3 backdrop-blur-lg bg-white bg-opacity-80 border-b border-neutral-700/40 ">

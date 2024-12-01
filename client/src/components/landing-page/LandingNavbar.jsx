@@ -143,4 +143,5 @@ const LandingNavbar = ({
     </nav>
   );
 };
+
 export default LandingNavbar;

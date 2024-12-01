@@ -1,9 +1,10 @@
-import React, { useState, Suspense, lazy } from "react";
+import React, { useState, Suspense, lazy, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import Navbar from "../../components/common/Navbar";
 import Sidebar from "../../components/common/Sidebar";
 import LoadingBar from "../../components/LoadingBar";
+import showNotification from "../../utils/showNotification";
 
 // Importing components lazily from the centralized index.js in the pages folder
 const Dashboard = lazy(() =>

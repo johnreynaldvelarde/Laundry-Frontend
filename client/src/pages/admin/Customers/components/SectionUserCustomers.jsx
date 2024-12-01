@@ -274,7 +274,7 @@ const SectionUserCustomers = ({ storeId }) => {
 
           <Box
             sx={{
-              width: "auto", // Auto width for Export button
+              // width: "auto", // Auto width for Export button
               ml: "auto", // Push Export button to the right edge
               mt: {
                 xs: 2, // Add top margin for small screens

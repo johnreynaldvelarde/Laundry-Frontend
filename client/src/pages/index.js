@@ -43,6 +43,8 @@ export { default as ServiceManage } from "./admin/Service/Service";
 // Section Settings
 export { default as Settings } from "./admin/Settings/Settings";
 
+// Section Delivery Man
+
 // Customer => Page
 export { default as CheckStartingPoint } from "./default_customer/checkStartingPoint";
 export { default as MainCustomer } from "./default_customer/mainCustomer";

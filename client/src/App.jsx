@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./contexts/ProtectedRoute";
 import ForgetPassword from "./pages/start/ForgetPassword";
+import VerifiedAccount from "./pages/start/VerifiedAccount";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           {/* This is public route */}
           <Route path="/" element={<StartingPage />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/verified-account" element={<VerifiedAccount />} />
           <Route path="*" element={<NotFound />} />
 
           {/* This is protected route */}

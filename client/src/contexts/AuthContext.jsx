@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { axiosPublic, axiosPrivate } from "../api/axios";
+import useSocket from "../hooks/common/useSocket";
 
 const AuthContext = createContext();
 
@@ -57,7 +58,7 @@ export const AuthProvider = ({ children }) => {
 
         return newAccessToken;
       } else {
-        console.error("Error refreshing access token:", response.data.message);
+        // console.error("Error refreshing access token:", response.data.message);
       }
     } catch (error) {
       console.error("Error refreshing access token:", error);
@@ -66,9 +67,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const fetchUserDetails = async (token) => {
-    if (!token || isFetchingRef.current) return;
+    if (!token || isFetchingRef.current) return; // Prevent duplicate fetches
 
-    isFetchingRef.current = true;
+    isFetchingRef.current = true; // Mark fetch as ongoing
     try {
       const response = await axiosPrivate(`/user/me`, {
         headers: {
@@ -80,6 +81,7 @@ export const AuthProvider = ({ children }) => {
         const user = response.data.user;
 
         if (user) {
+          // Initialize user details with common properties
           const userDetails = {
             userId: user.userId,
             storeId: user.storeId,
@@ -104,6 +106,7 @@ export const AuthProvider = ({ children }) => {
             },
           };
 
+          // Add roleName and permissions only if the user is not a customer
           if (user.userType !== "Customer") {
             userDetails.roleName = user.roleName || null;
             userDetails.permissions = {
@@ -122,7 +125,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Error fetching user details:", error);
     } finally {
-      isFetchingRef.current = false;
+      isFetchingRef.current = false; // Mark fetch as completed
     }
   };
 
@@ -143,6 +146,10 @@ export const AuthProvider = ({ children }) => {
 
     checkAccessToken();
   }, [accessToken]);
+
+  if (userDetails) {
+    const { socket, error } = useSocket(userDetails);
+  }
 
   const value = {
     accessToken,

@@ -107,14 +107,16 @@ const useRegisterForm = (showCreateAccountPopup, setShowCreateAccountPopup) => {
           Clear();
 
           if (userType === "Customer") {
-            const customerDetails =
-              await checkCustomerDetails.getCheckCustomerDetails(userId);
+            const details = await checkCustomerDetails.getCheckCustomerDetails(
+              userId
+            );
 
-            if (customerDetails.success !== false) {
-              if (
-                customerDetails.storeIdIsNull ||
-                customerDetails.addressIsNull
-              ) {
+            const { storeIdIsNull, addressIdIsNull, isVerified } = details.data;
+
+            if (details.success !== false) {
+              if (!isVerified) {
+                navigate("/verified-account");
+              } else if (storeIdIsNull || addressIdIsNull) {
                 navigate("/complete-details");
               } else {
                 navigate("/customer-page");

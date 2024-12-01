@@ -3,17 +3,16 @@ import useFetchData from "./useFetchData";
 import { getNotificationsList } from "../../services/api/customerApi";
 import useSocket from "./useSocket";
 import { getListAdminUserNotifications } from "../../services/api/getApi";
+import showNotification from "../../utils/showNotification";
 
 const useNavbarData = ({ userDetails }) => {
-  const { socket } = useSocket();
+  const { socket } = useSocket(userDetails);
   const [loading, setLoading] = useState(true);
   const { data: notifications, fetchData: fetchNotifications } = useFetchData();
-  const { data: message, fetchData: fetchMessage } = useFetchData();
 
   const fetchNotificationsData = useCallback(async () => {
     if (!userDetails || !userDetails.roleName) {
-      console.warn("userDetails not populated yet.");
-      return; // Exit if userDetails isn't available yet
+      return;
     }
 
     setLoading(true);
@@ -23,11 +22,6 @@ const useNavbarData = ({ userDetails }) => {
     const fetchFn = isCustomer
       ? getNotificationsList.getNotifications
       : getListAdminUserNotifications.getAdminUserNotifications;
-
-    // console.log("Role:", userDetails.roleName);
-    // console.log("Is customer:", isCustomer);
-    // console.log("Using fetch function:", fetchFn.name);
-    // console.log("Using ID:", id);
 
     await fetchNotifications(fetchFn, id);
 
@@ -41,17 +35,25 @@ const useNavbarData = ({ userDetails }) => {
 
   useEffect(() => {
     if (socket) {
-      socket.emit("register", userDetails.userId);
+      socket.on("notificationsModule", (data) => {
+        fetchNotificationsData();
+        showNotification({
+          message: data.message,
+          title: data.title,
+        });
+      });
 
-      // // Listen for notifications
-      // socket.on("newNotification", (notification) => {
-      //   console.log("Received newNotification:", notification);
-      //   // Handle the notification (e.g., update state or UI)
-      // });
+      socket.on("notificationsModuleForCustomer", (data) => {
+        fetchNotificationsData();
+        showNotification({
+          message: data.message,
+          title: data.title,
+        });
+      });
 
-      // return () => {
-      //   socket.off("newNotification"); // Cleanup the listener on unmount
-      // };
+      return () => {
+        socket.off("notificationsModule");
+      };
     }
   }, [socket, userDetails.userId]);
 
@@ -59,3 +61,15 @@ const useNavbarData = ({ userDetails }) => {
 };
 
 export default useNavbarData;
+
+// socket.emit("register", {
+//   userId: userDetails.userId,
+//   storeId: userDetails.storeId,
+//   userType: userDetails.roleName,
+// });
+
+// socket.on("registerSuccess", (data) => {
+//   console.log("Server response:", data.message);
+// });
+
+// socket.off("registerSuccess");

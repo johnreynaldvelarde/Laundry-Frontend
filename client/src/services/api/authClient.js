@@ -97,3 +97,33 @@ export const isEmailExist = {
     }
   },
 };
+
+// Update Change Email In Set of Account Verification
+export const updateEmailForVerified = {
+  putEmailForVerified: async (id, data) => {
+    try {
+      const response = await axiosPublic.put(
+        `/customers/${id}/update-email-for-verified`,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  },
+};
+
+export const updateAccountIsVerified = {
+  putAccountIsVerified: async (id) => {
+    try {
+      const response = await axiosPublic.put(
+        `/customers/${id}/update-account-verified`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  },
+};
