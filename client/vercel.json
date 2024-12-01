@@ -1,31 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/main/*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/complete-details/*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/customer-page/*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/forget-password",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/admin/*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/default_customer/*",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
