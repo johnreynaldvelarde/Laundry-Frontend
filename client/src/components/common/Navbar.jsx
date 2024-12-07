@@ -22,7 +22,7 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { ArrowDropDown } from "@mui/icons-material";
-
+import usePopup from "../../hooks/common/usePopup";
 import React, { useState, useContext, useEffect } from "react";
 import { FiMenu } from "react-icons/fi";
 import UserImage from "../admin-components/UserImage";
@@ -34,6 +34,7 @@ import useNavbarData from "../../hooks/common/useNavbarData";
 
 const Navbar = ({ sideBarWidth, handleDrawerToggle }) => {
   const { userDetails, fetchUserDetails, accessToken } = useAuth();
+  const { isOpen, popupType, openPopup, closePopup, popupData } = usePopup();
   const { loading, notifications, fetchNotificationsData } = useNavbarData({
     userDetails,
   });

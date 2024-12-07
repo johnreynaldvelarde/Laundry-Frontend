@@ -2,12 +2,17 @@ import React from "react";
 import { Menu, MenuItem, Typography, Divider } from "@mui/material";
 import noti_logo from "../../assets/images/logo.png";
 import { formatTimeNotification } from "../../utils/method";
+import PopSeeAllNotifications from "./popup/PopSeeAllNotifications";
+import usePopup from "../../hooks/common/usePopup";
+import PopOneByOneNotifications from "./popup/PopOneByOneNotifications";
 
 const A_DropNotifications = ({
   anchorElNotifications,
   handleCloseNotifications,
   notifications,
 }) => {
+  const { isOpen, popupType, openPopup, closePopup, popupData } = usePopup();
+
   return (
     <>
       <Menu
@@ -70,7 +75,7 @@ const A_DropNotifications = ({
             notifications.map((notification, index) => (
               <div
                 key={index}
-                onClick={handleCloseNotifications}
+                onClick={() => openPopup("openOneByOneNotifications")}
                 className="flex items-center p-2 cursor-pointer hover:bg-gray-100"
               >
                 <img
@@ -95,7 +100,7 @@ const A_DropNotifications = ({
         </div>
         <Divider />
         <MenuItem
-          onClick={handleCloseNotifications}
+          onClick={() => openPopup("openSeeAllNotifications")}
           sx={{ justifyContent: "center" }}
         >
           <Typography variant="body2" color="#5787C8">
@@ -103,6 +108,22 @@ const A_DropNotifications = ({
           </Typography>
         </MenuItem>
       </Menu>
+
+      {isOpen && popupType === "openOneByOneNotifications" && (
+        <PopOneByOneNotifications
+          open={isOpen}
+          onClose={closePopup}
+          data={popupData}
+        />
+      )}
+
+      {isOpen && popupType === "openSeeAllNotifications" && (
+        <PopSeeAllNotifications
+          open={isOpen}
+          onClose={closePopup}
+          data={notifications}
+        />
+      )}
     </>
   );
 };
