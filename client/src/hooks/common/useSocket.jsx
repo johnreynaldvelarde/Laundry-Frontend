@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
-const SOCKET_URL = "https://web-production-dd1d.up.railway.app";
+//const SOCKET_URL = "https://web-production-dd1d.up.railway.app";
+const SOCKET_URL = import.meta.env.VITE_SOCKET_API;
 
 const useSocket = (userDetails) => {
   const [socket, setSocket] = useState(null);
