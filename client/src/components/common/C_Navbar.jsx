@@ -19,10 +19,9 @@ import {
   Drawer,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { MdOutlineMailOutline, MdPayments } from "react-icons/md";
 import {
   AddressBook,
+  Bell,
   List,
   Password,
   SignOut,
@@ -41,6 +40,7 @@ import PopUpdatePassword from "../../pages/default_customer/components/PopUpdate
 import PopChangeStore from "../../pages/default_customer/components/PopChangeStore";
 import useNavbarData from "../../hooks/common/useNavbarData";
 import { formatTimeNotification } from "../../utils/method";
+import A_DropNotifications from "./A_DropNotifications";
 
 const C_Navbar = () => {
   const { userDetails, fetchUserDetails, accessToken } = useAuth();
@@ -263,23 +263,29 @@ const C_Navbar = () => {
         </Box>
 
         <Box className="flex items-center space-x-3">
-          <Tooltip title="Message" arrow>
+          {/* <Tooltip title="Message" arrow>
             <IconButton onClick={handleClickMessage}>
               <Badge badgeContent={messages.length} color="error">
                 <MdOutlineMailOutline style={{ color: styles.black }} />
               </Badge>
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
           <Tooltip title="Notifications" arrow>
-            <IconButton onClick={handleClickNotifications}>
+            <IconButton
+              className="rounded-circle"
+              onClick={handleClickNotifications}
+            >
               <Badge badgeContent={notifications.length} color="error">
-                <NotificationsIcon style={{ color: styles.black }} />
+                <Bell weight="duotone" size={24} color={COLORS.secondary} />
               </Badge>
             </IconButton>
           </Tooltip>
 
-          <UserImage className="h-8 w-8 md:h-10 md:w-10" />
+          <UserImage
+            avatar_link={userDetails.avatar_link}
+            className="h-8 w-8 md:h-10 md:w-10"
+          />
           <Box ml={3}>
             <Typography fontWeight="font-semibold" fontSize="medium">
               {userDetails.fullName}
@@ -297,7 +303,7 @@ const C_Navbar = () => {
           </IconButton>
 
           {/* For Message  */}
-          <Menu
+          {/* <Menu
             anchorEl={anchorElMessage}
             id="message-menu"
             open={Boolean(anchorElMessage)}
@@ -387,7 +393,7 @@ const C_Navbar = () => {
                 See All Messages
               </Typography>
             </MenuItem>
-          </Menu>
+          </Menu> */}
 
           {/* For Notifications */}
           <Menu
@@ -647,6 +653,13 @@ const C_Navbar = () => {
           logout={handleLogout}
         />
       )}
+
+      {/* For notications */}
+      <A_DropNotifications
+        anchorElNotifications={anchorElNotifications}
+        handleCloseNotifications={handleCloseNotifications}
+        notifications={notifications}
+      />
     </Box>
   );
 };

@@ -1,5 +1,44 @@
 import { axiosPrivate } from "../../api/axios";
 
+export const updateRemoveProfileImage = {
+  putUpdateProfileImage: async (id) => {
+    try {
+      const response = await axiosPrivate.put(
+        `/customers/${id}/delete-profile-picture`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+};
+
+export const updateNotificationOneByOne = {
+  putUpdateNotificationOneByOne: async (id) => {
+    try {
+      const response = await axiosPrivate.put(
+        `/staff/${id}/clear-one-by-on-notifications`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+};
+
+export const updateNotificationClearAllStaff = {
+  putUpdateNotificationClearAll: async (id) => {
+    try {
+      const response = await axiosPrivate.put(
+        `/staff/${id}/clear-one-by-on-notifications`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+};
+
 export const updateCustomerBasicInformation = {
   setCustomerInformation: async (customerId, data) => {
     try {

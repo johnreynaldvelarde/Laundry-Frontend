@@ -17,9 +17,6 @@ import {
 import useAuth from "../../contexts/AuthContext";
 import useLogout from "../../hooks/useLogout";
 
-// icons
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { ArrowDropDown } from "@mui/icons-material";
 import usePopup from "../../hooks/common/usePopup";
@@ -27,10 +24,11 @@ import React, { useState, useContext, useEffect } from "react";
 import { FiMenu } from "react-icons/fi";
 import UserImage from "../admin-components/UserImage";
 import { MdOutlineMailOutline } from "react-icons/md";
-import { FaRegBell } from "react-icons/fa";
 import A_DropNotifications from "./A_DropNotifications";
 import A_DropMessage from "./A_DropMessage";
 import useNavbarData from "../../hooks/common/useNavbarData";
+import { Bell } from "@phosphor-icons/react";
+import { COLORS } from "../../constants/color";
 
 const Navbar = ({ sideBarWidth, handleDrawerToggle }) => {
   const { userDetails, fetchUserDetails, accessToken } = useAuth();
@@ -117,6 +115,10 @@ const Navbar = ({ sideBarWidth, handleDrawerToggle }) => {
     }
   }, [userDetails, fetchNotificationsData]);
 
+  const handleRefreshData = () => {
+    fetchNotificationsData();
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -185,13 +187,13 @@ const Navbar = ({ sideBarWidth, handleDrawerToggle }) => {
                 onClick={handleOpenNotifications}
               >
                 <Badge badgeContent={notifications.length} color="error">
-                  <FaRegBell />
+                  <Bell weight="duotone" size={24} color={COLORS.secondary} />
                 </Badge>
               </IconButton>
             </Tooltip>
 
             <div>
-              <UserImage />
+              <UserImage avatar_link={userDetails.avatar_link} />
             </div>
             <Box
               sx={{
@@ -303,6 +305,7 @@ const Navbar = ({ sideBarWidth, handleDrawerToggle }) => {
         anchorElNotifications={anchorElNotifications}
         handleCloseNotifications={handleCloseNotifications}
         notifications={notifications}
+        handleRefreshData={handleRefreshData}
       />
     </AppBar>
   );

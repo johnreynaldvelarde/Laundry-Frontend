@@ -6,7 +6,7 @@ import { getListAdminUserNotifications } from "../../services/api/getApi";
 import showNotification from "../../utils/showNotification";
 
 const useNavbarData = ({ userDetails }) => {
-  const { socket } = useSocket(userDetails);
+  const { socket } = useSocket(userDetails); // Ensure that socket is correctly initialized
   const [loading, setLoading] = useState(true);
   const { data: notifications, fetchData: fetchNotifications } = useFetchData();
 
@@ -34,28 +34,24 @@ const useNavbarData = ({ userDetails }) => {
   ]);
 
   useEffect(() => {
-    if (socket) {
-      socket.on("notificationsModule", (data) => {
+    if (userDetails && socket) {
+      const notificationsHandler = (data) => {
         fetchNotificationsData();
         showNotification({
           message: data.message,
           title: data.title,
         });
-      });
+      };
 
-      socket.on("notificationsModuleForCustomer", (data) => {
-        fetchNotificationsData();
-        showNotification({
-          message: data.message,
-          title: data.title,
-        });
-      });
+      socket.on("notificationsModule", notificationsHandler);
+      socket.on("notificationsModuleForCustomer", notificationsHandler);
 
       return () => {
-        socket.off("notificationsModule");
+        socket.off("notificationsModule", notificationsHandler);
+        socket.off("notificationsModuleForCustomer", notificationsHandler);
       };
     }
-  }, [socket, userDetails.userId]);
+  }, [socket, userDetails, fetchNotificationsData]);
 
   return { loading, fetchNotificationsData, notifications };
 };

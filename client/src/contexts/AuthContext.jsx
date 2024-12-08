@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(null);
   const isFetchingRef = useRef(false);
   const [userDetails, setUserDetails] = useState({
+    avatar_link: "",
     userId: "",
     storeId: "",
     addressId: "",
@@ -83,6 +84,7 @@ export const AuthProvider = ({ children }) => {
         if (user) {
           // Initialize user details with common properties
           const userDetails = {
+            avatar_link: user.avatarLink,
             userId: user.userId,
             storeId: user.storeId,
             addressId: user.addressId,
@@ -147,9 +149,7 @@ export const AuthProvider = ({ children }) => {
     checkAccessToken();
   }, [accessToken]);
 
-  if (userDetails) {
-    const { socket, error } = useSocket(userDetails);
-  }
+  const { socket, error } = useSocket(userDetails);
 
   const value = {
     accessToken,
@@ -159,6 +159,8 @@ export const AuthProvider = ({ children }) => {
     isLoading,
     setIsLoading,
     fetchUserDetails,
+    socket,
+    error,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

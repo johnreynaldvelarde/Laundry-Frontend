@@ -5,11 +5,13 @@ import { formatTimeNotification } from "../../utils/method";
 import PopSeeAllNotifications from "./popup/PopSeeAllNotifications";
 import usePopup from "../../hooks/common/usePopup";
 import PopOneByOneNotifications from "./popup/PopOneByOneNotifications";
+import { updateNotificationClearAllStaff } from "../../services/api/putApi";
 
 const A_DropNotifications = ({
   anchorElNotifications,
   handleCloseNotifications,
   notifications,
+  handleRefreshData,
 }) => {
   const { isOpen, popupType, openPopup, closePopup, popupData } = usePopup();
 
@@ -56,13 +58,13 @@ const A_DropNotifications = ({
         >
           <div className="pl-3 text-lg">Notifications</div>
           <div>
-            <button
+            {/* <button
               className="text-sm pr-4 font-normal"
               //   onClick={handleClearAll}
               style={{ pointerEvents: "auto", color: "#5787C8" }}
             >
               Clear All
-            </button>
+            </button> */}
           </div>
         </div>
         <Divider />
@@ -75,7 +77,9 @@ const A_DropNotifications = ({
             notifications.map((notification, index) => (
               <div
                 key={index}
-                onClick={() => openPopup("openOneByOneNotifications")}
+                onClick={() =>
+                  openPopup("openOneByOneNotifications", notification)
+                }
                 className="flex items-center p-2 cursor-pointer hover:bg-gray-100"
               >
                 <img
@@ -114,6 +118,7 @@ const A_DropNotifications = ({
           open={isOpen}
           onClose={closePopup}
           data={popupData}
+          refreshData={handleRefreshData}
         />
       )}
 

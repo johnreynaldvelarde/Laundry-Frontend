@@ -8,11 +8,17 @@ import {
   Box,
   Avatar,
   Grid,
+  IconButton,
+  CircularProgress,
 } from "@mui/material";
 import toast from "react-hot-toast";
 import CustomPopHeaderTitle from "../../../components/common/CustomPopHeaderTitle";
 import CustomPopFooterButton from "../../../components/common/CustomPopFooterButton";
 import { COLORS } from "../../../constants/color";
+import defaultImage from "../../../assets/images/default_user.png";
+import { CameraAlt } from "@mui/icons-material";
+import axios from "axios";
+import { updateRemoveProfileImage } from "../../../services/api/putApi";
 import { updateCustomerProfile } from "../../../services/api/customerApi";
 
 const PopUpdateProfile = ({
@@ -22,6 +28,8 @@ const PopUpdateProfile = ({
   fetchUserDetails,
   accessToken,
 }) => {
+  const [avatarLink, setAvatarLink] = useState(userDetails.avatar_link);
+  const [avatarImage, setAvatarImage] = useState(null);
   const [firstname, setFirstName] = useState(userDetails.firstname);
   const [middlename, setMiddleName] = useState(userDetails.middlename || "");
   const [lastname, setLastName] = useState(userDetails.lastname || "");
@@ -29,7 +37,10 @@ const PopUpdateProfile = ({
   const [email, setEmail] = useState(userDetails.email || "");
   const [phone, setPhone] = useState(userDetails.phone || "");
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const avatarSrc = avatarLink ? avatarLink : "";
 
   const validateFields = () => {
     const newErrors = {};
@@ -107,6 +118,7 @@ const PopUpdateProfile = ({
         firstname: firstname,
         middlename: middlename,
         lastname: lastname,
+        avatar_link: avatarLink,
       };
 
       try {
@@ -134,6 +146,52 @@ const PopUpdateProfile = ({
     }
   };
 
+  // const deleteExistingImage = async (public_id) => {
+  //   try {
+  //     const response = await updateRemoveProfileImage.putUpdateProfileImage(
+  //       public_id
+  //     );
+
+  //     return true;
+  //   } catch (error) {
+  //     console.error("Error deleting image: ", error);
+  //     return false;
+  //   }
+  // };
+
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "upload_profile");
+      formData.append("folder", `profile_pictures/${userDetails.userId}`);
+      formData.append("public_id", `${userDetails.userId}`);
+
+      try {
+        // const deleteSuccess = await deleteExistingImage(userDetails.userId);
+        // if (deleteSuccess) {
+
+        // } else {
+        //   toast.error("Failed to delete the existing image.");
+        // }
+
+        setIsLoading(true);
+
+        const response = await axios.post(
+          `https://api.cloudinary.com/v1_1/dwuzi6pmo/image/upload`,
+          formData
+        );
+        setAvatarLink(response.data.secure_url);
+        setAvatarImage(response.data.secure_url);
+      } catch (error) {
+        toast.error("Error uploading image to Cloudinary");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
   return (
     <Dialog
       open={open}
@@ -153,12 +211,55 @@ const PopUpdateProfile = ({
         onClose={onClose}
       />
       <DialogContent>
-        <Box sx={{ mt: 3 }}>
-          <Avatar
-            src="/images/avatars/profile-avatar.png"
-            sx={{ width: 100, height: 100, mx: "auto" }}
-          />
-        </Box>
+        <Grid container spacing={3} mt={2} justifyContent={"center"}>
+          <Box sx={{ mt: 3 }} position="relative">
+            {/* Avatar */}
+            <Avatar
+              src={avatarImage || avatarSrc}
+              sx={{
+                width: 120,
+                height: 120,
+                mx: "auto",
+                opacity: isLoading ? 0.5 : 1,
+              }}
+            />
+            {isLoading && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  zIndex: 1,
+                }}
+              >
+                <CircularProgress size={40} />
+              </Box>
+            )}
+
+            <IconButton
+              component="label"
+              sx={{
+                position: "absolute",
+                bottom: "5px",
+                right: "5px",
+                backgroundColor: COLORS.primary,
+                color: "#fff",
+                borderRadius: "50%",
+                padding: 1,
+                boxShadow: 3,
+              }}
+            >
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleImageChange}
+              />
+              <CameraAlt />
+            </IconButton>
+          </Box>
+        </Grid>
 
         <Grid container spacing={3} sx={{ mt: 4 }}>
           <Grid item xs={12} sm={4}>

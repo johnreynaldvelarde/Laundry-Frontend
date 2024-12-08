@@ -9,20 +9,23 @@ const useSocket = (userDetails) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!userDetails) return;
+    if (!userDetails || !userDetails.userId || !userDetails.storeId) return; // Ensure userDetails are valid
+
     const newSocket = io(SOCKET_URL, {
       transports: ["websocket"],
+      reconnectionAttempts: 5, // Automatically attempt reconnection 5 times
+      reconnectionDelay: 1000, // Delay between reconnection attempts
+      reconnectionDelayMax: 5000, // Maximum delay between reconnections
     });
+
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
-      if (userDetails?.userId && userDetails?.storeId) {
-        newSocket.emit("register", {
-          userId: userDetails.userId,
-          storeId: userDetails.storeId,
-          userType: userDetails.roleName,
-        });
-      }
+      newSocket.emit("register", {
+        userId: userDetails.userId,
+        storeId: userDetails.storeId,
+        userType: userDetails.roleName,
+      });
     });
 
     newSocket.on("connect_error", (error) => {
@@ -30,9 +33,14 @@ const useSocket = (userDetails) => {
       console.error("Socket connection error:", error);
     });
 
+    newSocket.on("disconnect", () => {
+      console.error("Socket disconnected");
+    });
+
     return () => {
       newSocket.off("connect");
       newSocket.off("connect_error");
+      newSocket.off("disconnect");
       newSocket.disconnect();
     };
   }, [userDetails]);
